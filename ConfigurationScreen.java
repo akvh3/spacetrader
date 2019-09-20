@@ -1,7 +1,11 @@
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
-public class ConfigurationScreen extends JFrame implements ActionListener, WindowListener {
+import java.util.Dictionary;
+
+public class ConfigurationScreen extends JFrame implements ActionListener, WindowListener, ChangeListener {
     /*
     * OKKKK so this is the configurationScreen
     * title: Game Set-Up
@@ -17,10 +21,31 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
     private static JTextField userEntry;
     private static JTextArea characters;
     private static JButton confirmButton;
+    private static ButtonGroup group;
+    private static JPanel configPanel = new JPanel();
+    private static int credits;
+    private static int skillPoints = 0;
+    private static int fighterSkill = 0;
+    private static int merchantSkill = 0;
+    private static int engineerSkill = 0;
+    private static int pilotSkill = 0;
+    private static JSlider pilot;
+    private static JSlider merchant;
+    private static JSlider engineer;
+    private static JSlider fighter;
+    private static String difficulty;
+
+
+    public ConfigurationScreen(String title) {
+        configFrame = new JFrame(title);
+        configFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        createGUI();
+    }
 
     public static void createGUI() {
-        configFrame = new JFrame("Set-Up");
-        configFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        configFrame = new JFrame("Set-Up");
+//        configFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         Dimension size = new Dimension(500, 400);
         configFrame.setPreferredSize(size);
@@ -29,31 +54,118 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         confirmButton = new JButton("Confirm");
 
         JPanel pane = makeWelcomePane();
-
         configFrame.add(pane);
         configFrame.add(makeTextPane("Configure Your Character"));
-
+        configPanel.setLayout(new GridLayout(15, 15, 5, 0));
+        configFrame.add(addLabel("Enter your name below:"));
         configFrame.add(makeTextField());
-
+        configFrame.add(addLabel("Choose your difficulty:"));
+        configFrame.add(addRadioButton());
+        configFrame.add(addLabel("Allocate your skill points: " + skillPoints + " points total"));
+        configFrame.add(addSliders());
+        configFrame.add(addGoodButton("Confirm"));
         configFrame.pack();
         configFrame.setVisible(true);
 
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame config = new ConfirmationScreen();
-                config.setVisible(true);
                 configFrame.dispose();
+                JFrame config = new ConfirmationScreen("Confirmation Screen", charName, difficulty, skillPoints, credits);
             }
         });
     }
 
-    public static JTextField makeTextField() {
+    public static JPanel addLabel(String label) {
+        JLabel words = new JLabel(label);
+        configPanel.add(words);
+        return configPanel;
+    }
+
+    public static JPanel addSliders() {
+
+        JLabel lPilot = new JLabel("Pilot:");
+        pilot = new JSlider(0, 15 - fighterSkill - merchantSkill - engineerSkill);
+        pilot.setValue(0);
+        pilotSkill = pilot.getValue();
+        JLabel lFighter = new JLabel("Fighter:");
+        fighter = new JSlider(0, 15 - pilotSkill - merchantSkill - engineerSkill);
+        fighter.setValue(0);
+        fighterSkill = fighter.getValue();
+        JLabel lMerchant = new JLabel("Merchant:");
+        merchant = new JSlider(0, 15 - pilotSkill - fighterSkill - engineerSkill);
+        merchant.setValue(0);
+        merchantSkill = merchant.getValue();
+        JLabel lEngineer = new JLabel("Engineer:");
+        engineer = new JSlider(0, 15 - pilotSkill - fighterSkill - merchantSkill);
+        engineer.setValue(0);
+        engineerSkill = engineer.getValue();
+
+        pilot.setMajorTickSpacing(1);
+        pilot.setPaintTicks(true);
+        fighter.setMajorTickSpacing(1);
+        fighter.setPaintTicks(true);
+        merchant.setMajorTickSpacing(1);
+        merchant.setPaintTicks(true);
+        engineer.setMajorTickSpacing(1);
+        engineer.setPaintTicks(true);
+        configPanel.add(lPilot);
+        configPanel.add(pilot);
+        configPanel.add(lFighter);
+        configPanel.add(fighter);
+        configPanel.add(lMerchant);
+        configPanel.add(merchant);
+        configPanel.add(lEngineer);
+        configPanel.add(engineer);
+
+        return configPanel;
+    }
+
+    public void stateChanged(ChangeEvent e) {
+        JSlider source = (JSlider)e.getSource();
+        if (!source.getValueIsAdjusting()) {
+            System.out.println("Hi");
+            if ((JSlider) source == pilot) {
+                pilotSkill = source.getValue();
+                pilot.setMaximum(15 - fighterSkill - merchantSkill - engineerSkill);
+            } else if ((JSlider) source == fighter) {
+                fighterSkill = source.getValue();
+                fighter.setMaximum(15 - pilotSkill - merchantSkill - engineerSkill);
+            } else if ((JSlider) source == merchant) {
+                merchantSkill = source.getValue();
+                merchant.setMaximum(15 - fighterSkill - pilotSkill - engineerSkill);
+            } else if ((JSlider) source == engineer) {
+                engineerSkill = source.getValue();
+                engineer.setMaximum(15 - fighterSkill - merchantSkill - pilotSkill);
+            }
+        }
+    }
+
+    public static JPanel addRadioButton() {
+        JRadioButton easyButton = new JRadioButton("Easy");
+        JRadioButton medButton = new JRadioButton("Medium");
+        JRadioButton hardButton = new JRadioButton("Hard");
+
+        group = new ButtonGroup();
+        group.add(easyButton);
+        group.add(medButton);
+        group.add(hardButton);
+
+        JPanel radioPanel = new JPanel(new GridLayout(1, 0));
+        radioPanel.add(easyButton);
+        radioPanel.add(medButton);
+        radioPanel.add(hardButton);
+
+        configPanel.add(radioPanel);
+        return configPanel;
+    }
+
+    public static JPanel makeTextField() {
         userEntry = new JTextField(15);
         TextFieldListener tfListen = new TextFieldListener();
         userEntry.addActionListener(tfListen);
-
-        return userEntry;
+        configPanel.add(userEntry);
+        return configPanel;
     }
 
     private static class TextFieldListener implements ActionListener {
@@ -67,8 +179,13 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         p.setBorder(BorderFactory.createTitledBorder("Set-Up"));
         BoxLayout layout = new BoxLayout(p, BoxLayout.X_AXIS);
         p.setLayout(layout);
-
         return p;
+    }
+
+    public static JPanel addGoodButton(String label) {
+        JButton button = new JButton(label);
+        configPanel.add(confirmButton);
+        return configPanel;
     }
 
     public static JPanel makeTextPane(String name) {
@@ -79,21 +196,13 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
 
     public static JPanel makeButtonPane() {
         JPanel p = new JPanel();
-//        p.setBorder(BorderFactory.createTitledBorder("Welcome"));
         BoxLayout layout = new BoxLayout(p, BoxLayout.X_AXIS);
         p.setLayout(layout);
-
-
-
         addButton(confirmButton, p);
         return p;
     }
 
     private static void addText(String text, Container container) {
-//        JTextField textBox = new JTextField(text, 20);
-//        textBox.setAlignmentX(CENTER_ALIGNMENT);
-//        textBox.setAlignmentY(TOP_ALIGNMENT);
-
         JLabel newText = new JLabel(text);
         container.add(newText);
     }
@@ -103,24 +212,6 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         button.setAlignmentX(CENTER_ALIGNMENT);
         button.setAlignmentY(BOTTOM_ALIGNMENT);
         container.add(button);
-
-        //if (button.getName() == "Start New Game") {
-//            button.addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    JFrame config = new ConfigurationScreen();
-//                    config.setVisible(true);
-//                }
-//            });
-        // }
-    }
-
-    public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createGUI();
-            }
-        });
     }
 
     @Override
