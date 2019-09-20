@@ -38,10 +38,8 @@ public class WelcomeScreen extends JFrame implements ActionListener, WindowListe
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //ConfigurationScreen();
                 mainFrame.dispose();
                 JFrame config = new ConfigurationScreen("Set-Up");
-                config.setVisible(true);
             }
         });
     }
@@ -52,8 +50,6 @@ public class WelcomeScreen extends JFrame implements ActionListener, WindowListe
         BoxLayout layout = new BoxLayout(p, BoxLayout.X_AXIS);
         p.setLayout(layout);
 
-        //addText("Welcome to Space Trader!", p);
-//
         p.add(makeButtonPane());
         p.add(makeTextPane("Welcome to Space Trader!"));
 
@@ -68,22 +64,14 @@ public class WelcomeScreen extends JFrame implements ActionListener, WindowListe
 
     public static JPanel makeButtonPane() {
         JPanel p = new JPanel();
-//        p.setBorder(BorderFactory.createTitledBorder("Welcome"));
         BoxLayout layout = new BoxLayout(p, BoxLayout.X_AXIS);
         p.setLayout(layout);
-
-        //addButton("Levels", p);
         addButton(startButton, p);
-        //addButton("Trade", p);
 
         return p;
     }
 
     private static void addText(String text, Container container) {
-//        JTextField textBox = new JTextField(text, 20);
-//        textBox.setAlignmentX(CENTER_ALIGNMENT);
-//        textBox.setAlignmentY(TOP_ALIGNMENT);
-
         JLabel newText = new JLabel(text);
         container.add(newText);
     }
@@ -93,16 +81,6 @@ public class WelcomeScreen extends JFrame implements ActionListener, WindowListe
         button.setAlignmentX(CENTER_ALIGNMENT);
         button.setAlignmentY(BOTTOM_ALIGNMENT);
         container.add(button);
-
-        //if (button.getName() == "Start New Game") {
-//            button.addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    JFrame config = new ConfigurationScreen();
-//                    config.setVisible(true);
-//                }
-//            });
-       // }
     }
 
     public static void main(String[] args) {
