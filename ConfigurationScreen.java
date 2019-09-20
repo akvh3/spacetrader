@@ -18,9 +18,16 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
     private static JTextArea characters;
     private static JButton confirmButton;
 
-    public static void createGUI() {
-        configFrame = new JFrame("Set-Up");
+    public ConfigurationScreen(String title) {
+        configFrame = new JFrame(title);
         configFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        createGUI();
+    }
+
+    public static void createGUI() {
+//        configFrame = new JFrame("Set-Up");
+//        configFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         Dimension size = new Dimension(500, 400);
         configFrame.setPreferredSize(size);
@@ -115,13 +122,13 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         // }
     }
 
-    public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createGUI();
-            }
-        });
-    }
+//    public static void main(String[] args) {
+//        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//                createGUI();
+//            }
+//        });
+//    }
 
     @Override
     public void actionPerformed(ActionEvent e) {

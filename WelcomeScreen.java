@@ -38,9 +38,10 @@ public class WelcomeScreen extends JFrame implements ActionListener, WindowListe
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame config = new ConfigurationScreen();
-                config.setVisible(true);
+                //ConfigurationScreen();
                 mainFrame.dispose();
+                JFrame config = new ConfigurationScreen("Set-Up");
+                config.setVisible(true);
             }
         });
     }
