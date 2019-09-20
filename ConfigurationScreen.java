@@ -7,7 +7,7 @@ import java.util.Dictionary;
 
 public class ConfigurationScreen extends JFrame implements ActionListener, WindowListener, ChangeListener {
     /*
-    * OKKKK so this is the configurationScreen
+    * configurationScreen
     * title: Game Set-Up
     * textbox where players can enter their character's name
     * checkboxes to select level (easy, hard, medium)
@@ -21,6 +21,10 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
     private static JTextField userEntry;
     private static JTextArea characters;
     private static JButton confirmButton;
+    private static JRadioButton easyButton;
+    private static JRadioButton medButton;
+    private static JRadioButton hardButton;
+    private static JLabel skillLabel;
     private static ButtonGroup group;
     private static JPanel configPanel = new JPanel();
     private static int credits;
@@ -52,6 +56,23 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         configFrame.setLocation(450, 200);
 
         confirmButton = new JButton("Confirm");
+        easyButton = new JRadioButton("Easy");
+        easyButton.setActionCommand("8");
+        medButton = new JRadioButton("Medium");
+        medButton.setActionCommand("12");
+        hardButton = new JRadioButton("Hard");
+        hardButton.setActionCommand("16");
+
+        class ActionListen implements ActionListener {
+            public void actionPerformed(ActionEvent event) {
+                String updated = group.getSelection().getActionCommand();
+                update(updated);
+            }
+        }
+
+        easyButton.addActionListener(new ActionListen());
+        medButton.addActionListener(new ActionListen());
+        hardButton.addActionListener(new ActionListen());
 
         JPanel pane = makeWelcomePane();
         configFrame.add(pane);
@@ -61,7 +82,10 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         configFrame.add(makeTextField());
         configFrame.add(addLabel("Choose your difficulty:"));
         configFrame.add(addRadioButton());
-        configFrame.add(addLabel("Allocate your skill points: " + skillPoints + " points total"));
+        skillLabel = new JLabel("Allocate your skill points: " + getSkillPoints() + " points total");
+        configPanel.add(skillLabel);
+        configFrame.add(configPanel);
+//        configFrame.add(addLabel("Allocate your skill points: " + getSkillPoints() + " points total"));
         configFrame.add(addSliders());
         configFrame.add(addGoodButton("Confirm"));
         configFrame.pack();
@@ -74,6 +98,17 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
                 JFrame config = new ConfirmationScreen("Confirmation Screen", charName, difficulty, skillPoints, credits);
             }
         });
+//        easyButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                setSkillPoints(8);
+//                update();
+//            }
+//        });
+
+    }
+    private static void update(String newText) {
+        skillLabel.setText("Allocate your skill points: " + newText + " points total");
     }
 
     public static JPanel addLabel(String label) {
@@ -142,10 +177,6 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
     }
 
     public static JPanel addRadioButton() {
-        JRadioButton easyButton = new JRadioButton("Easy");
-        JRadioButton medButton = new JRadioButton("Medium");
-        JRadioButton hardButton = new JRadioButton("Hard");
-
         group = new ButtonGroup();
         group.add(easyButton);
         group.add(medButton);
@@ -212,6 +243,12 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         button.setAlignmentX(CENTER_ALIGNMENT);
         button.setAlignmentY(BOTTOM_ALIGNMENT);
         container.add(button);
+    }
+    public static void setSkillPoints(int points) {
+        skillPoints = points;
+    }
+    public static int getSkillPoints() {
+        return skillPoints;
     }
 
     @Override
