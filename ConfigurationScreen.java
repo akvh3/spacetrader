@@ -37,7 +37,6 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
     private static JSlider merchant;
     private static JSlider engineer;
     private static JSlider fighter;
-    private static String difficulty;
 
 
     public ConfigurationScreen(String title) {
@@ -47,26 +46,25 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         createGUI();
     }
 
-    public static void createGUI() {
-//        configFrame = new JFrame("Set-Up");
-//        configFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+    public void createGUI() {
         Dimension size = new Dimension(500, 400);
         configFrame.setPreferredSize(size);
         configFrame.setLocation(450, 200);
 
         confirmButton = new JButton("Confirm");
+
         easyButton = new JRadioButton("Easy");
-        easyButton.setActionCommand("8");
+        easyButton.setActionCommand("16");
         medButton = new JRadioButton("Medium");
         medButton.setActionCommand("12");
         hardButton = new JRadioButton("Hard");
-        hardButton.setActionCommand("16");
+        hardButton.setActionCommand("8");
 
         class ActionListen implements ActionListener {
             public void actionPerformed(ActionEvent event) {
                 String updated = group.getSelection().getActionCommand();
                 update(updated);
+                skillPoints = Integer.parseInt(updated);
             }
         }
 
@@ -85,7 +83,6 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         skillLabel = new JLabel("Allocate your skill points: " + getSkillPoints() + " points total");
         configPanel.add(skillLabel);
         configFrame.add(configPanel);
-//        configFrame.add(addLabel("Allocate your skill points: " + getSkillPoints() + " points total"));
         configFrame.add(addSliders());
         configFrame.add(addGoodButton("Confirm"));
         configFrame.pack();
@@ -95,18 +92,12 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
             @Override
             public void actionPerformed(ActionEvent e) {
                 configFrame.dispose();
-                JFrame config = new ConfirmationScreen("Confirmation Screen", charName, difficulty, skillPoints, credits);
+                JFrame config = new ConfirmationScreen("Confirmation Screen", charName,
+                        skillPoints, fighterSkill, merchantSkill, engineerSkill, pilotSkill);
             }
         });
-//        easyButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                setSkillPoints(8);
-//                update();
-//            }
-//        });
-
     }
+
     private static void update(String newText) {
         skillLabel.setText("Allocate your skill points: " + newText + " points total");
     }
@@ -117,7 +108,7 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         return configPanel;
     }
 
-    public static JPanel addSliders() {
+    public JPanel addSliders() {
 
         JLabel lPilot = new JLabel("Pilot:");
         pilot = new JSlider(0, 15 - fighterSkill - merchantSkill - engineerSkill);
@@ -136,6 +127,10 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         engineer.setValue(0);
         engineerSkill = engineer.getValue();
 
+        pilot.addChangeListener(this);
+        merchant.addChangeListener(this);
+        engineer.addChangeListener(this);
+        fighter.addChangeListener(this);
         pilot.setMajorTickSpacing(1);
         pilot.setPaintTicks(true);
         fighter.setMajorTickSpacing(1);
@@ -159,17 +154,16 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
     public void stateChanged(ChangeEvent e) {
         JSlider source = (JSlider)e.getSource();
         if (!source.getValueIsAdjusting()) {
-            System.out.println("Hi");
-            if ((JSlider) source == pilot) {
+            if ((JSlider)e.getSource() == pilot) {
                 pilotSkill = source.getValue();
                 pilot.setMaximum(15 - fighterSkill - merchantSkill - engineerSkill);
-            } else if ((JSlider) source == fighter) {
+            } else if ((JSlider)e.getSource() == fighter) {
                 fighterSkill = source.getValue();
                 fighter.setMaximum(15 - pilotSkill - merchantSkill - engineerSkill);
-            } else if ((JSlider) source == merchant) {
+            } else if ((JSlider)e.getSource() == merchant) {
                 merchantSkill = source.getValue();
                 merchant.setMaximum(15 - fighterSkill - pilotSkill - engineerSkill);
-            } else if ((JSlider) source == engineer) {
+            } else if ((JSlider)e.getSource() == engineer) {
                 engineerSkill = source.getValue();
                 engineer.setMaximum(15 - fighterSkill - merchantSkill - pilotSkill);
             }
@@ -201,7 +195,7 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
 
     private static class TextFieldListener implements ActionListener {
         public void actionPerformed(ActionEvent event)
-        {   String charName = userEntry.getText();
+        {   charName = userEntry.getText();
         }
     }
 

@@ -3,52 +3,89 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class ConfirmationScreen extends JFrame implements ActionListener, WindowListener {
-    private static JFrame confirmFrame;
-    private static JPanel confirmPanel;
-    private static String charName;
-    private static String level;
-    private static int credits;
-    private static int skillPoints;
+    private JFrame confirmFrame;
+    private JPanel confirmPanel;
+    private String characterName;
+    private String level;
+    private int credits;
+    private int totalPoints;
+    private int fighterSkill;
+    private int merchantSkill ;
+    private int engineerSkill;
+    private int pilotSkill;
+    private JPanel textP;
 
-    public ConfirmationScreen(String title, String character, String level, int skillPoints, int credits) {
+
+    public ConfirmationScreen(String title, String character, int skillPoints, int fSkill,
+                              int mSkill, int eSkill, int pSkill) {
         confirmFrame = new JFrame(title);
-        charName = character;
-        level = this.level;
-        skillPoints = this.skillPoints;
-        credits = this.credits;
-
-
         confirmFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        characterName = character;
+        this.totalPoints = skillPoints;
+        fighterSkill = fSkill;
+        merchantSkill = mSkill;
+        engineerSkill = eSkill;
+        pilotSkill = pSkill;
 
-
+        if (skillPoints == 16) {
+            credits = 16;
+            level = "Easy";
+        } else if (skillPoints == 12) {
+            credits = 12;
+            level = "Medium";
+        } else if (skillPoints == 8){
+            credits = 8;
+            level = "Hard";
+        }
         createGUI();
     }
 
-    public static void createGUI() {
+    public void createGUI() {
         Dimension size = new Dimension(500, 400);
         confirmFrame.setPreferredSize(size);
         confirmFrame.setLocation(450, 200);
-
+        JPanel pane = makeConfirmPane();
+        confirmFrame.add(pane);
         confirmPanel = new JPanel();
-        confirmPanel.setBorder(BorderFactory.createTitledBorder("Confirm Settings"));
-        BoxLayout layout = new BoxLayout(confirmPanel, BoxLayout.X_AXIS);
-        confirmPanel.setLayout(layout);
+        confirmPanel.setLayout(new GridLayout(15, 15, 5, 0));
 
-        confirmPanel.add(makeTextPane("Confirm Settings"));
+        confirmFrame.add(makeTextPane("Confirmation Page"));
+        confirmFrame.add(addLabel("Character Name: " + characterName));
 
-        confirmFrame.add(confirmPanel);
+        confirmFrame.add(addLabel("Difficulty: " + level));
+        confirmFrame.add(addLabel("Skills: "));
+        confirmFrame.add(addLabel("     Fighter: " + fighterSkill));
+        confirmFrame.add(addLabel("     Merchant: " + merchantSkill));
+        confirmFrame.add(addLabel("     Engineering: " + engineerSkill));
+        confirmFrame.add(addLabel("     Pilot: " + pilotSkill));
+        confirmFrame.add(addLabel("Starting credits: " + credits));
         confirmFrame.pack();
         confirmFrame.setVisible(true);
 
     }
+    public JPanel addLabel(String label) {
+        JLabel words = new JLabel(label);
+        confirmPanel.add(words);
+        return confirmPanel;
+    }
 
-    public static JPanel makeTextPane(String name) {
-        JPanel textP = new JPanel();
+    public JPanel makeConfirmPane() {
+        JPanel p = new JPanel();
+        p.setBorder(BorderFactory.createTitledBorder("Confirmation"));
+        BoxLayout layout = new BoxLayout(p, BoxLayout.X_AXIS);
+        p.setLayout(layout);
+
+        return p;
+    }
+
+    public JPanel makeTextPane(String name) {
+        textP = new JPanel();
         addText(name, textP);
+
         return textP;
     }
 
-    private static void addText(String text, Container container) {
+    private void addText(String text, Container container) {
         JLabel newText = new JLabel(text);
         container.add(newText);
     }
