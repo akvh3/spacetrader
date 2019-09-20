@@ -1,11 +1,13 @@
 import com.sun.xml.internal.messaging.saaj.soap.JpegDataContentHandler;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Dictionary;
 
-public class ConfigurationScreen extends JFrame implements ActionListener, WindowListener {
+public class ConfigurationScreen extends JFrame implements ActionListener, WindowListener, ChangeListener {
     /*
     * OKKKK so this is the configurationScreen
     * title: Game Set-Up
@@ -25,6 +27,15 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
     private static JPanel configPanel = new JPanel();
     private static int credits;
     private static int skillPoints = 0;
+    private static int fighterSkill = 0;
+    private static int merchantSkill = 0;
+    private static int engineerSkill = 0;
+    private static int pilotSkill = 0;
+    private static JSlider pilot;
+    private static JSlider merchant;
+    private static JSlider engineer;
+    private static JSlider fighter;
+
 
     public ConfigurationScreen(String title) {
         configFrame = new JFrame(title);
@@ -74,27 +85,32 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
     }
 
     public static JPanel addSliders() {
+
         JLabel lPilot = new JLabel("Pilot:");
-        JSlider pilot = new JSlider(0, skillPoints);
+        pilot = new JSlider(0, 15 - fighterSkill - merchantSkill - engineerSkill);
+        pilot.setValue(0);
+        pilotSkill = pilot.getValue();
         JLabel lFighter = new JLabel("Fighter:");
-        JSlider fighter = new JSlider(0, skillPoints);
+        fighter = new JSlider(0, 15 - pilotSkill - merchantSkill - engineerSkill);
+        fighter.setValue(0);
+        fighterSkill = fighter.getValue();
         JLabel lMerchant = new JLabel("Merchant:");
-        JSlider merchant = new JSlider(0, skillPoints);
+        merchant = new JSlider(0, 15 - pilotSkill - fighterSkill - engineerSkill);
+        merchant.setValue(0);
+        merchantSkill = merchant.getValue();
         JLabel lEngineer = new JLabel("Engineer:");
-        JSlider engineer = new JSlider(0, skillPoints);
+        engineer = new JSlider(0, 15 - pilotSkill - fighterSkill - merchantSkill);
+        engineer.setValue(0);
+        engineerSkill = engineer.getValue();
 
         pilot.setMajorTickSpacing(1);
         pilot.setPaintTicks(true);
-        pilot.setValue(0);
         fighter.setMajorTickSpacing(1);
         fighter.setPaintTicks(true);
-        fighter.setValue(0);
         merchant.setMajorTickSpacing(1);
         merchant.setPaintTicks(true);
-        merchant.setValue(0);
         engineer.setMajorTickSpacing(1);
         engineer.setPaintTicks(true);
-        engineer.setValue(0);
         configPanel.add(lPilot);
         configPanel.add(pilot);
         configPanel.add(lFighter);
@@ -105,6 +121,26 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         configPanel.add(engineer);
 
         return configPanel;
+    }
+
+    public void stateChanged(ChangeEvent e) {
+        JSlider source = (JSlider)e.getSource();
+        if (!source.getValueIsAdjusting()) {
+            System.out.println("Hi");
+            if ((JSlider) source == pilot) {
+                pilotSkill = source.getValue();
+                pilot.setMaximum(15 - fighterSkill - merchantSkill - engineerSkill);
+            } else if ((JSlider) source == fighter) {
+                fighterSkill = source.getValue();
+                fighter.setMaximum(15 - pilotSkill - merchantSkill - engineerSkill);
+            } else if ((JSlider) source == merchant) {
+                merchantSkill = source.getValue();
+                merchant.setMaximum(15 - fighterSkill - pilotSkill - engineerSkill);
+            } else if ((JSlider) source == engineer) {
+                engineerSkill = source.getValue();
+                engineer.setMaximum(15 - fighterSkill - merchantSkill - pilotSkill);
+            }
+        }
     }
 
     public static JPanel addRadioButton() {
@@ -154,6 +190,7 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         configPanel.add(button);
         return configPanel;
     }
+
     public static JPanel makeTextPane(String name) {
         JPanel textP = new JPanel();
         addText(name, textP);
