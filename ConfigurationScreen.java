@@ -75,14 +75,26 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
 
     public static JPanel addSliders() {
         JLabel lPilot = new JLabel("Pilot:");
-        JSlider pilot = new JSlider();
+        JSlider pilot = new JSlider(0, skillPoints);
         JLabel lFighter = new JLabel("Fighter:");
-        JSlider fighter = new JSlider();
+        JSlider fighter = new JSlider(0, skillPoints);
         JLabel lMerchant = new JLabel("Merchant:");
-        JSlider merchant = new JSlider();
+        JSlider merchant = new JSlider(0, skillPoints);
         JLabel lEngineer = new JLabel("Engineer:");
-        JSlider engineer = new JSlider();
+        JSlider engineer = new JSlider(0, skillPoints);
 
+        pilot.setMajorTickSpacing(1);
+        pilot.setPaintTicks(true);
+        pilot.setValue(0);
+        fighter.setMajorTickSpacing(1);
+        fighter.setPaintTicks(true);
+        fighter.setValue(0);
+        merchant.setMajorTickSpacing(1);
+        merchant.setPaintTicks(true);
+        merchant.setValue(0);
+        engineer.setMajorTickSpacing(1);
+        engineer.setPaintTicks(true);
+        engineer.setValue(0);
         configPanel.add(lPilot);
         configPanel.add(pilot);
         configPanel.add(lFighter);
