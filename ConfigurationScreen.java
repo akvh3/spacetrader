@@ -1,13 +1,13 @@
-import com.sun.xml.internal.messaging.saaj.soap.JpegDataContentHandler;
-
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Dictionary;
 
-public class ConfigurationScreen extends JFrame implements ActionListener, WindowListener {
+public class ConfigurationScreen extends JFrame implements ActionListener, WindowListener, ChangeListener {
     /*
-    * OKKKK so this is the configurationScreen
+    * configurationScreen
     * title: Game Set-Up
     * textbox where players can enter their character's name
     * checkboxes to select level (easy, hard, medium)
@@ -21,10 +21,24 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
     private static JTextField userEntry;
     private static JTextArea characters;
     private static JButton confirmButton;
+    private static JRadioButton easyButton;
+    private static JRadioButton medButton;
+    private static JRadioButton hardButton;
+    private static JLabel skillLabel;
     private static ButtonGroup group;
     private static JPanel configPanel = new JPanel();
     private static int credits;
     private static int skillPoints = 0;
+    private static int fighterSkill = 0;
+    private static int merchantSkill = 0;
+    private static int engineerSkill = 0;
+    private static int pilotSkill = 0;
+    private static JSlider pilot;
+    private static JSlider merchant;
+    private static JSlider engineer;
+    private static JSlider fighter;
+    private static String difficulty;
+
 
     public ConfigurationScreen(String title) {
         configFrame = new JFrame(title);
@@ -33,15 +47,30 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         createGUI();
     }
 
-    public static void createGUI() {
-//        configFrame = new JFrame("Set-Up");
-//        configFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+    public void createGUI() {
         Dimension size = new Dimension(500, 400);
         configFrame.setPreferredSize(size);
         configFrame.setLocation(450, 200);
 
         confirmButton = new JButton("Confirm");
+
+        easyButton = new JRadioButton("Easy");
+        easyButton.setActionCommand("8");
+        medButton = new JRadioButton("Medium");
+        medButton.setActionCommand("12");
+        hardButton = new JRadioButton("Hard");
+        hardButton.setActionCommand("16");
+
+        class ActionListen implements ActionListener {
+            public void actionPerformed(ActionEvent event) {
+                String updated = group.getSelection().getActionCommand();
+                update(updated);
+            }
+        }
+
+        easyButton.addActionListener(new ActionListen());
+        medButton.addActionListener(new ActionListen());
+        hardButton.addActionListener(new ActionListen());
 
         JPanel pane = makeWelcomePane();
         configFrame.add(pane);
@@ -51,7 +80,9 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         configFrame.add(makeTextField());
         configFrame.add(addLabel("Choose your difficulty:"));
         configFrame.add(addRadioButton());
-        configFrame.add(addLabel("Allocate your skill points: " + skillPoints + " points total"));
+        skillLabel = new JLabel("Allocate your skill points: " + getSkillPoints() + " points total");
+        configPanel.add(skillLabel);
+        configFrame.add(configPanel);
         configFrame.add(addSliders());
         configFrame.add(addGoodButton("Confirm"));
         configFrame.pack();
@@ -60,11 +91,16 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame config = new ConfirmationScreen();
-                config.setVisible(true);
                 configFrame.dispose();
+                JFrame config = new ConfirmationScreen("Confirmation Screen", charName, difficulty,
+                        skillPoints, fighterSkill,
+                merchantSkill, engineerSkill, pilotSkill);
             }
         });
+    }
+
+    private static void update(String newText) {
+        skillLabel.setText("Allocate your skill points: " + newText + " points total");
     }
 
     public static JPanel addLabel(String label) {
@@ -73,28 +109,37 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         return configPanel;
     }
 
-    public static JPanel addSliders() {
-        JLabel lPilot = new JLabel("Pilot:");
-        JSlider pilot = new JSlider(0, skillPoints);
-        JLabel lFighter = new JLabel("Fighter:");
-        JSlider fighter = new JSlider(0, skillPoints);
-        JLabel lMerchant = new JLabel("Merchant:");
-        JSlider merchant = new JSlider(0, skillPoints);
-        JLabel lEngineer = new JLabel("Engineer:");
-        JSlider engineer = new JSlider(0, skillPoints);
+    public JPanel addSliders() {
 
+        JLabel lPilot = new JLabel("Pilot:");
+        pilot = new JSlider(0, 15 - fighterSkill - merchantSkill - engineerSkill);
+        pilot.setValue(0);
+        pilotSkill = pilot.getValue();
+        JLabel lFighter = new JLabel("Fighter:");
+        fighter = new JSlider(0, 15 - pilotSkill - merchantSkill - engineerSkill);
+        fighter.setValue(0);
+        fighterSkill = fighter.getValue();
+        JLabel lMerchant = new JLabel("Merchant:");
+        merchant = new JSlider(0, 15 - pilotSkill - fighterSkill - engineerSkill);
+        merchant.setValue(0);
+        merchantSkill = merchant.getValue();
+        JLabel lEngineer = new JLabel("Engineer:");
+        engineer = new JSlider(0, 15 - pilotSkill - fighterSkill - merchantSkill);
+        engineer.setValue(0);
+        engineerSkill = engineer.getValue();
+
+        pilot.addChangeListener(this);
+        merchant.addChangeListener(this);
+        engineer.addChangeListener(this);
+        fighter.addChangeListener(this);
         pilot.setMajorTickSpacing(1);
         pilot.setPaintTicks(true);
-        pilot.setValue(0);
         fighter.setMajorTickSpacing(1);
         fighter.setPaintTicks(true);
-        fighter.setValue(0);
         merchant.setMajorTickSpacing(1);
         merchant.setPaintTicks(true);
-        merchant.setValue(0);
         engineer.setMajorTickSpacing(1);
         engineer.setPaintTicks(true);
-        engineer.setValue(0);
         configPanel.add(lPilot);
         configPanel.add(pilot);
         configPanel.add(lFighter);
@@ -107,11 +152,26 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         return configPanel;
     }
 
-    public static JPanel addRadioButton() {
-        JRadioButton easyButton = new JRadioButton("Easy");
-        JRadioButton medButton = new JRadioButton("Medium");
-        JRadioButton hardButton = new JRadioButton("Hard");
+    public void stateChanged(ChangeEvent e) {
+        JSlider source = (JSlider)e.getSource();
+        if (!source.getValueIsAdjusting()) {
+            if ((JSlider)e.getSource() == pilot) {
+                pilotSkill = source.getValue();
+                pilot.setMaximum(15 - fighterSkill - merchantSkill - engineerSkill);
+            } else if ((JSlider)e.getSource() == fighter) {
+                fighterSkill = source.getValue();
+                fighter.setMaximum(15 - pilotSkill - merchantSkill - engineerSkill);
+            } else if ((JSlider)e.getSource() == merchant) {
+                merchantSkill = source.getValue();
+                merchant.setMaximum(15 - fighterSkill - pilotSkill - engineerSkill);
+            } else if ((JSlider)e.getSource() == engineer) {
+                engineerSkill = source.getValue();
+                engineer.setMaximum(15 - fighterSkill - merchantSkill - pilotSkill);
+            }
+        }
+    }
 
+    public static JPanel addRadioButton() {
         group = new ButtonGroup();
         group.add(easyButton);
         group.add(medButton);
@@ -145,15 +205,15 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         p.setBorder(BorderFactory.createTitledBorder("Set-Up"));
         BoxLayout layout = new BoxLayout(p, BoxLayout.X_AXIS);
         p.setLayout(layout);
-
         return p;
     }
 
     public static JPanel addGoodButton(String label) {
         JButton button = new JButton(label);
-        configPanel.add(button);
+        configPanel.add(confirmButton);
         return configPanel;
     }
+
     public static JPanel makeTextPane(String name) {
         JPanel textP = new JPanel();
         addText(name, textP);
@@ -162,21 +222,13 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
 
     public static JPanel makeButtonPane() {
         JPanel p = new JPanel();
-//        p.setBorder(BorderFactory.createTitledBorder("Welcome"));
         BoxLayout layout = new BoxLayout(p, BoxLayout.X_AXIS);
         p.setLayout(layout);
-
-
-
         addButton(confirmButton, p);
         return p;
     }
 
     private static void addText(String text, Container container) {
-//        JTextField textBox = new JTextField(text, 20);
-//        textBox.setAlignmentX(CENTER_ALIGNMENT);
-//        textBox.setAlignmentY(TOP_ALIGNMENT);
-
         JLabel newText = new JLabel(text);
         container.add(newText);
     }
@@ -186,25 +238,13 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         button.setAlignmentX(CENTER_ALIGNMENT);
         button.setAlignmentY(BOTTOM_ALIGNMENT);
         container.add(button);
-
-        //if (button.getName() == "Start New Game") {
-//            button.addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    JFrame config = new ConfigurationScreen();
-//                    config.setVisible(true);
-//                }
-//            });
-        // }
     }
-
-//    public static void main(String[] args) {
-//        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-//            public void run() {
-//                createGUI();
-//            }
-//        });
-//    }
+    public static void setSkillPoints(int points) {
+        skillPoints = points;
+    }
+    public static int getSkillPoints() {
+        return skillPoints;
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
