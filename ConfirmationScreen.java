@@ -3,87 +3,89 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class ConfirmationScreen extends JFrame implements ActionListener, WindowListener {
-    private static JFrame confirmFrame;
-    private static JPanel confirmPanel;
-    private static String charName;
-    private static String level;
-    private static int credits;
-    private static int skillPoints;
-    private static int fighterSkill;
-    private static int merchantSkill ;
-    private static int engineerSkill;
-    private static int pilotSkill;
+    private JFrame confirmFrame;
+    private JPanel confirmPanel;
+    private String characterName;
+    private String level;
+    private int credits;
+    private int totalPoints;
+    private int fighterSkill;
+    private int merchantSkill ;
+    private int engineerSkill;
+    private int pilotSkill;
+    private JPanel textP;
 
 
-    public ConfirmationScreen(String title, String character,
-                              String level, int skillPoints, int fSkill,
+    public ConfirmationScreen(String title, String character, int skillPoints, int fSkill,
                               int mSkill, int eSkill, int pSkill) {
         confirmFrame = new JFrame(title);
         confirmFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        charName = character;
-        level = this.level;
-        skillPoints = this.skillPoints;
+        characterName = character;
+        this.totalPoints = skillPoints;
         fighterSkill = fSkill;
         merchantSkill = mSkill;
         engineerSkill = eSkill;
         pilotSkill = pSkill;
 
-        if (level == "Easy") {
-            credits = 8;
-        } else if (level == "Medium") {
-            credits = 12;
-        } else {
-            credits = 16;
+        if (skillPoints == 16) {
+            credits = 1000;
+            level = "Easy";
+        } else if (skillPoints == 12) {
+            credits = 500;
+            level = "Medium";
+        } else if (skillPoints == 8){
+            credits = 100;
             level = "Hard";
         }
         createGUI();
     }
 
-    public static void createGUI() {
+    public void createGUI() {
         Dimension size = new Dimension(500, 400);
         confirmFrame.setPreferredSize(size);
         confirmFrame.setLocation(450, 200);
-
         JPanel pane = makeConfirmPane();
-
         confirmFrame.add(pane);
+        confirmPanel = new JPanel();
+        confirmPanel.setLayout(new GridLayout(15, 15, 5, 0));
+
+        confirmFrame.add(makeTextPane("Confirmation Page"));
+        confirmFrame.add(addLabel("Character Name: " + characterName));
+
+        confirmFrame.add(addLabel("Difficulty: " + level));
+        confirmFrame.add(addLabel("Skills: "));
+        confirmFrame.add(addLabel("     Fighter: " + fighterSkill));
+        confirmFrame.add(addLabel("     Merchant: " + merchantSkill));
+        confirmFrame.add(addLabel("     Engineering: " + engineerSkill));
+        confirmFrame.add(addLabel("     Pilot: " + pilotSkill));
+        confirmFrame.add(addLabel("Starting credits: " + credits));
         confirmFrame.pack();
         confirmFrame.setVisible(true);
 
     }
+    public JPanel addLabel(String label) {
+        JLabel words = new JLabel(label);
+        confirmPanel.add(words);
+        return confirmPanel;
+    }
 
-    public static JPanel makeConfirmPane() {
+    public JPanel makeConfirmPane() {
         JPanel p = new JPanel();
         p.setBorder(BorderFactory.createTitledBorder("Confirmation"));
         BoxLayout layout = new BoxLayout(p, BoxLayout.X_AXIS);
         p.setLayout(layout);
-        p.add(makeTextPane("Confirmation Page"));
 
         return p;
     }
 
-
-    public static JPanel makeTextPane(String name) {
-        // display difficulty selected
-
-        // display skill selections
-
-        // display starting credits
-        JPanel textP = new JPanel();
+    public JPanel makeTextPane(String name) {
+        textP = new JPanel();
         addText(name, textP);
-        addText("Character Name: " + charName, textP);
 
-        addText("Difficulty: " + level, textP);
-        addText("Skills: ", textP);
-        addText("     Fighter: " + fighterSkill, textP);
-        addText("     Merchant: " + merchantSkill, textP);
-        addText("     Engineering: " + engineerSkill, textP);
-        addText("     Pilot: " + pilotSkill, textP);
-        addText("Starting credits: " + credits, textP);
         return textP;
     }
 
-    private static void addText(String text, Container container) {
+    private void addText(String text, Container container) {
         JLabel newText = new JLabel(text);
         container.add(newText);
     }

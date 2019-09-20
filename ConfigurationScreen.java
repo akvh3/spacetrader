@@ -7,14 +7,14 @@ import java.util.Dictionary;
 
 public class ConfigurationScreen extends JFrame implements ActionListener, WindowListener, ChangeListener {
     /*
-    * configurationScreen
-    * title: Game Set-Up
-    * textbox where players can enter their character's name
-    * checkboxes to select level (easy, hard, medium)
-    * Text displaying amount of money (based on level selected)
-    * meters to set 4 skill levels
-    * Confirm button at bottom to go to a confirmation screen
-    *
+     * configurationScreen
+     * title: Game Set-Up
+     * textbox where players can enter their character's name
+     * checkboxes to select level (easy, hard, medium)
+     * Text displaying amount of money (based on level selected)
+     * meters to set 4 skill levels
+     * Confirm button at bottom to go to a confirmation screen
+     *
      */
     private static JFrame configFrame;
     private static String charName;
@@ -37,11 +37,7 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
     private static JSlider merchant;
     private static JSlider engineer;
     private static JSlider fighter;
-<<<<<<< HEAD
-=======
-    private static String difficulty;
 
->>>>>>> ce5c31e2d69fd319f641b4c2e8528e8c2ba5cbaf
 
     public ConfigurationScreen(String title) {
         configFrame = new JFrame(title);
@@ -51,12 +47,6 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
     }
 
     public void createGUI() {
-<<<<<<< HEAD
-//        configFrame = new JFrame("Set-Up");
-//        configFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-=======
->>>>>>> ce5c31e2d69fd319f641b4c2e8528e8c2ba5cbaf
         Dimension size = new Dimension(500, 400);
         configFrame.setPreferredSize(size);
         configFrame.setLocation(450, 200);
@@ -64,15 +54,16 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         confirmButton = new JButton("Confirm");
 
         easyButton = new JRadioButton("Easy");
-        easyButton.setActionCommand("8");
+        easyButton.setActionCommand("16");
         medButton = new JRadioButton("Medium");
         medButton.setActionCommand("12");
         hardButton = new JRadioButton("Hard");
-        hardButton.setActionCommand("16");
+        hardButton.setActionCommand("8");
 
         class ActionListen implements ActionListener {
             public void actionPerformed(ActionEvent event) {
                 String updated = group.getSelection().getActionCommand();
+                skillPoints = Integer.parseInt(updated);
                 update(updated);
             }
         }
@@ -101,9 +92,8 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
             @Override
             public void actionPerformed(ActionEvent e) {
                 configFrame.dispose();
-                JFrame config = new ConfirmationScreen("Confirmation Screen", charName, difficulty,
-                        skillPoints, fighterSkill,
-                merchantSkill, engineerSkill, pilotSkill);
+                JFrame config = new ConfirmationScreen("Confirmation Screen", charName,
+                        skillPoints, fighterSkill, merchantSkill, engineerSkill, pilotSkill);
             }
         });
     }
@@ -121,19 +111,19 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
     public JPanel addSliders() {
 
         JLabel lPilot = new JLabel("Pilot:");
-        pilot = new JSlider(0, 15 - fighterSkill - merchantSkill - engineerSkill);
+        pilot = new JSlider(0, getSkillPoints() - fighterSkill - merchantSkill - engineerSkill);
         pilot.setValue(0);
         pilotSkill = pilot.getValue();
         JLabel lFighter = new JLabel("Fighter:");
-        fighter = new JSlider(0, 15 - pilotSkill - merchantSkill - engineerSkill);
+        fighter = new JSlider(0, getSkillPoints() - pilotSkill - merchantSkill - engineerSkill);
         fighter.setValue(0);
         fighterSkill = fighter.getValue();
         JLabel lMerchant = new JLabel("Merchant:");
-        merchant = new JSlider(0, 15 - pilotSkill - fighterSkill - engineerSkill);
+        merchant = new JSlider(0, getSkillPoints() - pilotSkill - fighterSkill - engineerSkill);
         merchant.setValue(0);
         merchantSkill = merchant.getValue();
         JLabel lEngineer = new JLabel("Engineer:");
-        engineer = new JSlider(0, 15 - pilotSkill - fighterSkill - merchantSkill);
+        engineer = new JSlider(0, getSkillPoints() - pilotSkill - fighterSkill - merchantSkill);
         engineer.setValue(0);
         engineerSkill = engineer.getValue();
 
@@ -166,27 +156,19 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         if (!source.getValueIsAdjusting()) {
             if ((JSlider)e.getSource() == pilot) {
                 pilotSkill = source.getValue();
-                pilot.setMaximum(15 - fighterSkill - merchantSkill - engineerSkill);
+                pilot.setMaximum(getSkillPoints() - fighterSkill - merchantSkill - engineerSkill);
             } else if ((JSlider)e.getSource() == fighter) {
                 fighterSkill = source.getValue();
-                fighter.setMaximum(15 - pilotSkill - merchantSkill - engineerSkill);
+                fighter.setMaximum(getSkillPoints() - pilotSkill - merchantSkill - engineerSkill);
             } else if ((JSlider)e.getSource() == merchant) {
                 merchantSkill = source.getValue();
-                merchant.setMaximum(15 - fighterSkill - pilotSkill - engineerSkill);
+                merchant.setMaximum(getSkillPoints() - fighterSkill - pilotSkill - engineerSkill);
             } else if ((JSlider)e.getSource() == engineer) {
                 engineerSkill = source.getValue();
-                engineer.setMaximum(15 - fighterSkill - merchantSkill - pilotSkill);
+                engineer.setMaximum(getSkillPoints() - fighterSkill - merchantSkill - pilotSkill);
             }
         }
     }
-<<<<<<< HEAD
-
-    public static JPanel addRadioButton() {
-        JRadioButton easyButton = new JRadioButton("Easy");
-        JRadioButton medButton = new JRadioButton("Medium");
-        JRadioButton hardButton = new JRadioButton("Hard");
-=======
->>>>>>> ce5c31e2d69fd319f641b4c2e8528e8c2ba5cbaf
 
     public static JPanel addRadioButton() {
         group = new ButtonGroup();
@@ -213,7 +195,7 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
 
     private static class TextFieldListener implements ActionListener {
         public void actionPerformed(ActionEvent event)
-        {   String charName = userEntry.getText();
+        {   charName = userEntry.getText();
         }
     }
 
@@ -305,7 +287,6 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
 
 
 }
-
 
 
 
