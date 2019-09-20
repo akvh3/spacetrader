@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 import com.sun.xml.internal.messaging.saaj.soap.JpegDataContentHandler;
 
+=======
+>>>>>>> 800db1997c79181fa1eb925ceb31ed0737f7462c
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -9,7 +12,11 @@ import java.util.Dictionary;
 
 public class ConfigurationScreen extends JFrame implements ActionListener, WindowListener, ChangeListener {
     /*
+<<<<<<< HEAD
     * OKKKK so this is the configurationScreen
+=======
+    * configurationScreen
+>>>>>>> 800db1997c79181fa1eb925ceb31ed0737f7462c
     * title: Game Set-Up
     * textbox where players can enter their character's name
     * checkboxes to select level (easy, hard, medium)
@@ -23,6 +30,13 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
     private static JTextField userEntry;
     private static JTextArea characters;
     private static JButton confirmButton;
+<<<<<<< HEAD
+=======
+    private static JRadioButton easyButton;
+    private static JRadioButton medButton;
+    private static JRadioButton hardButton;
+    private static JLabel skillLabel;
+>>>>>>> 800db1997c79181fa1eb925ceb31ed0737f7462c
     private static ButtonGroup group;
     private static JPanel configPanel = new JPanel();
     private static int credits;
@@ -35,6 +49,10 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
     private static JSlider merchant;
     private static JSlider engineer;
     private static JSlider fighter;
+<<<<<<< HEAD
+=======
+    private static String difficulty;
+>>>>>>> 800db1997c79181fa1eb925ceb31ed0737f7462c
 
 
     public ConfigurationScreen(String title) {
@@ -53,6 +71,26 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         configFrame.setLocation(450, 200);
 
         confirmButton = new JButton("Confirm");
+<<<<<<< HEAD
+=======
+        easyButton = new JRadioButton("Easy");
+        easyButton.setActionCommand("8");
+        medButton = new JRadioButton("Medium");
+        medButton.setActionCommand("12");
+        hardButton = new JRadioButton("Hard");
+        hardButton.setActionCommand("16");
+
+        class ActionListen implements ActionListener {
+            public void actionPerformed(ActionEvent event) {
+                String updated = group.getSelection().getActionCommand();
+                update(updated);
+            }
+        }
+
+        easyButton.addActionListener(new ActionListen());
+        medButton.addActionListener(new ActionListen());
+        hardButton.addActionListener(new ActionListen());
+>>>>>>> 800db1997c79181fa1eb925ceb31ed0737f7462c
 
         JPanel pane = makeWelcomePane();
         configFrame.add(pane);
@@ -62,7 +100,14 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         configFrame.add(makeTextField());
         configFrame.add(addLabel("Choose your difficulty:"));
         configFrame.add(addRadioButton());
+<<<<<<< HEAD
         configFrame.add(addLabel("Allocate your skill points: " + skillPoints + " points total"));
+=======
+        skillLabel = new JLabel("Allocate your skill points: " + getSkillPoints() + " points total");
+        configPanel.add(skillLabel);
+        configFrame.add(configPanel);
+//        configFrame.add(addLabel("Allocate your skill points: " + getSkillPoints() + " points total"));
+>>>>>>> 800db1997c79181fa1eb925ceb31ed0737f7462c
         configFrame.add(addSliders());
         configFrame.add(addGoodButton("Confirm"));
         configFrame.pack();
@@ -71,11 +116,29 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+<<<<<<< HEAD
                 JFrame config = new ConfirmationScreen();
                 config.setVisible(true);
                 configFrame.dispose();
             }
         });
+=======
+                configFrame.dispose();
+                JFrame config = new ConfirmationScreen("Confirmation Screen", charName, difficulty, skillPoints, credits);
+            }
+        });
+//        easyButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                setSkillPoints(8);
+//                update();
+//            }
+//        });
+
+    }
+    private static void update(String newText) {
+        skillLabel.setText("Allocate your skill points: " + newText + " points total");
+>>>>>>> 800db1997c79181fa1eb925ceb31ed0737f7462c
     }
 
     public static JPanel addLabel(String label) {
@@ -144,10 +207,13 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
     }
 
     public static JPanel addRadioButton() {
+<<<<<<< HEAD
         JRadioButton easyButton = new JRadioButton("Easy");
         JRadioButton medButton = new JRadioButton("Medium");
         JRadioButton hardButton = new JRadioButton("Hard");
 
+=======
+>>>>>>> 800db1997c79181fa1eb925ceb31ed0737f7462c
         group = new ButtonGroup();
         group.add(easyButton);
         group.add(medButton);
@@ -181,13 +247,20 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         p.setBorder(BorderFactory.createTitledBorder("Set-Up"));
         BoxLayout layout = new BoxLayout(p, BoxLayout.X_AXIS);
         p.setLayout(layout);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 800db1997c79181fa1eb925ceb31ed0737f7462c
         return p;
     }
 
     public static JPanel addGoodButton(String label) {
         JButton button = new JButton(label);
+<<<<<<< HEAD
         configPanel.add(button);
+=======
+        configPanel.add(confirmButton);
+>>>>>>> 800db1997c79181fa1eb925ceb31ed0737f7462c
         return configPanel;
     }
 
@@ -199,21 +272,29 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
 
     public static JPanel makeButtonPane() {
         JPanel p = new JPanel();
+<<<<<<< HEAD
 //        p.setBorder(BorderFactory.createTitledBorder("Welcome"));
         BoxLayout layout = new BoxLayout(p, BoxLayout.X_AXIS);
         p.setLayout(layout);
 
 
 
+=======
+        BoxLayout layout = new BoxLayout(p, BoxLayout.X_AXIS);
+        p.setLayout(layout);
+>>>>>>> 800db1997c79181fa1eb925ceb31ed0737f7462c
         addButton(confirmButton, p);
         return p;
     }
 
     private static void addText(String text, Container container) {
+<<<<<<< HEAD
 //        JTextField textBox = new JTextField(text, 20);
 //        textBox.setAlignmentX(CENTER_ALIGNMENT);
 //        textBox.setAlignmentY(TOP_ALIGNMENT);
 
+=======
+>>>>>>> 800db1997c79181fa1eb925ceb31ed0737f7462c
         JLabel newText = new JLabel(text);
         container.add(newText);
     }
@@ -223,6 +304,7 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         button.setAlignmentX(CENTER_ALIGNMENT);
         button.setAlignmentY(BOTTOM_ALIGNMENT);
         container.add(button);
+<<<<<<< HEAD
 
         //if (button.getName() == "Start New Game") {
 //            button.addActionListener(new ActionListener() {
@@ -242,6 +324,15 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
 //            }
 //        });
 //    }
+=======
+    }
+    public static void setSkillPoints(int points) {
+        skillPoints = points;
+    }
+    public static int getSkillPoints() {
+        return skillPoints;
+    }
+>>>>>>> 800db1997c79181fa1eb925ceb31ed0737f7462c
 
     @Override
     public void actionPerformed(ActionEvent e) {

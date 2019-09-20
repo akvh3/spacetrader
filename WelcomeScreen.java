@@ -38,10 +38,15 @@ public class WelcomeScreen extends JFrame implements ActionListener, WindowListe
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+<<<<<<< HEAD
                 //ConfigurationScreen();
                 mainFrame.dispose();
                 JFrame config = new ConfigurationScreen("Set-Up");
                 config.setVisible(true);
+=======
+                mainFrame.dispose();
+                JFrame config = new ConfigurationScreen("Set-Up");
+>>>>>>> 800db1997c79181fa1eb925ceb31ed0737f7462c
             }
         });
     }
@@ -52,8 +57,11 @@ public class WelcomeScreen extends JFrame implements ActionListener, WindowListe
         BoxLayout layout = new BoxLayout(p, BoxLayout.X_AXIS);
         p.setLayout(layout);
 
+<<<<<<< HEAD
         //addText("Welcome to Space Trader!", p);
 //
+=======
+>>>>>>> 800db1997c79181fa1eb925ceb31ed0737f7462c
         p.add(makeButtonPane());
         p.add(makeTextPane("Welcome to Space Trader!"));
 
@@ -68,6 +76,7 @@ public class WelcomeScreen extends JFrame implements ActionListener, WindowListe
 
     public static JPanel makeButtonPane() {
         JPanel p = new JPanel();
+<<<<<<< HEAD
 //        p.setBorder(BorderFactory.createTitledBorder("Welcome"));
         BoxLayout layout = new BoxLayout(p, BoxLayout.X_AXIS);
         p.setLayout(layout);
@@ -75,15 +84,23 @@ public class WelcomeScreen extends JFrame implements ActionListener, WindowListe
         //addButton("Levels", p);
         addButton(startButton, p);
         //addButton("Trade", p);
+=======
+        BoxLayout layout = new BoxLayout(p, BoxLayout.X_AXIS);
+        p.setLayout(layout);
+        addButton(startButton, p);
+>>>>>>> 800db1997c79181fa1eb925ceb31ed0737f7462c
 
         return p;
     }
 
     private static void addText(String text, Container container) {
+<<<<<<< HEAD
 //        JTextField textBox = new JTextField(text, 20);
 //        textBox.setAlignmentX(CENTER_ALIGNMENT);
 //        textBox.setAlignmentY(TOP_ALIGNMENT);
 
+=======
+>>>>>>> 800db1997c79181fa1eb925ceb31ed0737f7462c
         JLabel newText = new JLabel(text);
         container.add(newText);
     }
@@ -93,6 +110,7 @@ public class WelcomeScreen extends JFrame implements ActionListener, WindowListe
         button.setAlignmentX(CENTER_ALIGNMENT);
         button.setAlignmentY(BOTTOM_ALIGNMENT);
         container.add(button);
+<<<<<<< HEAD
 
         //if (button.getName() == "Start New Game") {
 //            button.addActionListener(new ActionListener() {
@@ -103,6 +121,8 @@ public class WelcomeScreen extends JFrame implements ActionListener, WindowListe
 //                }
 //            });
        // }
+=======
+>>>>>>> 800db1997c79181fa1eb925ceb31ed0737f7462c
     }
 
     public static void main(String[] args) {
