@@ -2,7 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class ConfirmationScreen extends JFrame implements ActionListener, WindowListener {
+public class ConfirmationScreen
+        extends JFrame implements ActionListener, WindowListener {
     private JFrame confirmFrame;
     private JPanel confirmPanel;
     private String characterName;
@@ -10,13 +11,14 @@ public class ConfirmationScreen extends JFrame implements ActionListener, Window
     private int credits;
     private int totalPoints;
     private int fighterSkill;
-    private int merchantSkill ;
+    private int merchantSkill;
     private int engineerSkill;
     private int pilotSkill;
     private JPanel textP;
 
 
-    public ConfirmationScreen(String title, String character, int skillPoints, int fSkill,
+    public ConfirmationScreen(String title, String character,
+                              int skillPoints, int fSkill,
                               int mSkill, int eSkill, int pSkill) {
         confirmFrame = new JFrame(title);
         confirmFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,10 +35,13 @@ public class ConfirmationScreen extends JFrame implements ActionListener, Window
         } else if (skillPoints == 12) {
             credits = 500;
             level = "Medium";
-        } else if (skillPoints == 8){
+        } else if (skillPoints == 8) {
             credits = 100;
             level = "Hard";
         }
+        Player player = new Player(skillPoints,
+                fighterSkill, merchantSkill,
+                engineerSkill, pilotSkill, credits);
         createGUI();
     }
 

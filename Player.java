@@ -9,18 +9,13 @@ public class Player {
 
     private String difficulty;
 
-    public Player(String difficulty) {
-        this.difficulty = difficulty;
-        if (difficulty.equals("EASY")) {
-            skillPoints = 16;
-            credits = 1000;
-        } else if (difficulty.equals("MEDIUM")) {
-            skillPoints = 12;
-            credits = 500;
-        } else {
-            skillPoints = 8;
-            credits = 100;
-        }
+    public Player(int skillPoints, int fSkill, int mSkill, int eSkill, int pSkill, int credits) {
+        this.skillPoints = skillPoints;
+        this.fighterSkill = fSkill;
+        this.merchantSkill = mSkill;
+        this.engineerSkill = eSkill;
+        this.pilotSkill = pSkill;
+        this.credits = credits;
     }
 
     //getter methods for instance data
