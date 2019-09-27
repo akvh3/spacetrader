@@ -3,9 +3,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Dictionary;
 
-public class ConfigurationScreen extends JFrame implements ActionListener, WindowListener, ChangeListener {
+public class ConfigurationScreen extends
+        JFrame implements ActionListener, WindowListener, ChangeListener {
     /*
      * configurationScreen
      * title: Game Set-Up
@@ -80,7 +80,8 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         configFrame.add(makeTextField());
         configFrame.add(addLabel("Choose your difficulty:"));
         configFrame.add(addRadioButton());
-        skillLabel = new JLabel("Allocate your skill points: " + getSkillPoints() + " points total");
+        skillLabel = new JLabel("Allocate your skill points: "
+                + getSkillPoints() + " points total");
         configPanel.add(skillLabel);
         configFrame.add(configPanel);
         configFrame.add(addSliders());
@@ -152,18 +153,18 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
     }
 
     public void stateChanged(ChangeEvent e) {
-        JSlider source = (JSlider)e.getSource();
+        JSlider source = (JSlider) e.getSource();
         if (!source.getValueIsAdjusting()) {
-            if ((JSlider)e.getSource() == pilot) {
+            if ((JSlider) e.getSource() == pilot) {
                 pilotSkill = source.getValue();
                 pilot.setMaximum(getSkillPoints() - fighterSkill - merchantSkill - engineerSkill);
-            } else if ((JSlider)e.getSource() == fighter) {
+            } else if ((JSlider) e.getSource() == fighter) {
                 fighterSkill = source.getValue();
                 fighter.setMaximum(getSkillPoints() - pilotSkill - merchantSkill - engineerSkill);
-            } else if ((JSlider)e.getSource() == merchant) {
+            } else if ((JSlider) e.getSource() == merchant) {
                 merchantSkill = source.getValue();
                 merchant.setMaximum(getSkillPoints() - fighterSkill - pilotSkill - engineerSkill);
-            } else if ((JSlider)e.getSource() == engineer) {
+            } else if ((JSlider) e.getSource() == engineer) {
                 engineerSkill = source.getValue();
                 engineer.setMaximum(getSkillPoints() - fighterSkill - merchantSkill - pilotSkill);
             }
@@ -193,11 +194,6 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
         return configPanel;
     }
 
-    private static class TextFieldListener implements ActionListener {
-        public void actionPerformed(ActionEvent event)
-        {   charName = userEntry.getText();
-        }
-    }
 
     public static JPanel makeWelcomePane() {
         JPanel p = new JPanel();
@@ -285,6 +281,11 @@ public class ConfigurationScreen extends JFrame implements ActionListener, Windo
 
     }
 
+    private static class TextFieldListener implements ActionListener {
+        public void actionPerformed(ActionEvent event) {
+            charName = userEntry.getText();
+        }
+    }
 
 }
 

@@ -9,7 +9,8 @@ public class Player {
 
     private String difficulty;
 
-    public Player(int skillPoints, int fSkill, int mSkill, int eSkill, int pSkill, int credits) {
+    public Player(int skillPoints, int fSkill,
+                  int mSkill, int eSkill, int pSkill, int credits) {
         this.skillPoints = skillPoints;
         this.fighterSkill = fSkill;
         this.merchantSkill = mSkill;

@@ -3,7 +3,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class WelcomeScreen extends JFrame implements ActionListener, WindowListener {
+public class WelcomeScreen extends
+        JFrame implements ActionListener, WindowListener {
     /*
      * display a welcome screen
      * needs option to start New Game
